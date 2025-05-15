@@ -142,12 +142,27 @@ document.getElementById('enterToSendCheckbox').addEventListener('change', functi
   localStorage.setItem('enterToSend', this.checked); // 状態を保存
 });
 
+// 通知音ON/OFFの変更を保存
+document.getElementById('notifySoundCheckbox').addEventListener('change', function() {
+  localStorage.setItem('soundEnabled', this.checked);
+});
+
+
 // ページ読み込み時にエンターキー送信設定を反映
 window.onload = function() {
-  const enterToSend = localStorage.getItem('enterToSend') === 'true'; // 保存された設定を取得
-  document.getElementById('enterToSendCheckbox').checked = enterToSend; // チェックボックスに反映
+  const enterToSend = localStorage.getItem('enterToSend') === 'true';
+  document.getElementById('enterToSendCheckbox').checked = enterToSend;
 
-  // 初期化処理
+  // 🔽 通知音設定の復元処理を追加
+  const soundEnabled = localStorage.getItem('soundEnabled');
+  if (soundEnabled !== null) {
+    document.getElementById('notifySoundCheckbox').checked = (soundEnabled === 'true');
+  } else {
+    // デフォルトはON（true）とする
+    document.getElementById('notifySoundCheckbox').checked = true;
+    localStorage.setItem('soundEnabled', true);
+  }
+
   fetchMessageHistory();
   setInterval(fetchMessageHistory, 5000);
 };
